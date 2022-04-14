@@ -41,6 +41,9 @@ class Partition:
         )
         cursor.execute(create_table_query)
         conn.commit()
+        print("Outputting kafka contents")
+        for m in self.messages:
+            print(m)
         cursor.executemany("INSERT or REPLACE into data VALUES(?,?,?,?,?);",
                            [m.to_row() for m in self.messages])   
         conn.commit()
