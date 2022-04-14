@@ -34,15 +34,15 @@ class Partition:
         create_table_query = (
             "CREATE TABLE IF NOT EXISTS data "
             "(offset INTEGER PRIMARY KEY, "
-            "key BLOB NOT NULL, "
+            "key BLOB, "
             "message BLOB, "
             "timestamp INTEGER, "
             "headers TEXT)"
         )
         cursor.execute(create_table_query)
         conn.commit()
-        cursor.executemany("INSERT INTO data VALUES(?,?,?,?,?);",
-                           [m.to_row() for m in self.messages])
+        cursor.executemany("INSERT or REPLACE into data VALUES(?,?,?,?,?);",
+                           [m.to_row() for m in self.messages])   
         conn.commit()
         conn.close()
 
